@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gleefy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda&family=Montserrat&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      background: #0b0b0b;
+      color: #f7f3eb;
+      font-family: Montserrat;
+      text-align: center;
+    }
+
+    img {
+      width: 100px;
+      margin-top: 30px;
+    }
+
+    h1 {
+      font-family: "Bodoni Moda";
+      margin-bottom: 30px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+      padding-bottom: 120px;
+    }
+
+    select {
+      width: 100%;
+      padding: 16px;
+      margin: 12px 0;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #c8a96a;
+      color: white;
+    }
+
+    select option {
+      color: black;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .buttons {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+    }
+
+    .generate-btn {
+      flex: 2;
+      padding: 18px;
+      background: linear-gradient(90deg, #c8a96a, #e5d3a1);
+      border: none;
+      color: black;
+      font-size: 16px;
+    }
+
+    .reset-btn {
+      flex: 1;
+      padding: 18px;
+      background: #111;
+      color: #c8a96a;
+      border: none;
+    }
+
+    .card {
+      background: #141414;
+      margin: 20px;
+      padding: 20px;
+      text-align: left;
+      border-radius: 10px;
+    }
+
+    .back {
+      margin: 20px;
+      padding: 10px;
+      border: 1px solid #c8a96a;
+      background: transparent;
+      color: #c8a96a;
+    }
+  </style>
+</head>
+
+<body>
+
+<img src="logo.png">
+<h1>GLEEFY</h1>
+
+<div class="container" id="main">
+
+  <select id="mode" onchange="showFields()">
+    <option value="">Select Mode</option>
+    <option value="experience">Experiences</option>
+    <option value="concierge">Concierge</option>
+  </select>
+
+  <div id="fields" class="hidden">
+
+    <div id="experienceFields">
+      <select id="expType">
+        <option value="">Type</option>
+        <option>Select</option>
+        <option>Bespoke</option>
+      </select>
+
+      <select id="expDomain">
+        <option value="">Domain</option>
+        <option>Sports</option>
+        <option>Destinations</option>
+        <option>Festivals</option>
+        <option>Spiritual</option>
+      </select>
+    </div>
+
+    <div id="conciergeFields" class="hidden">
+      <select id="conciergeType">
+        <option value="">Type</option>
+        <option>Direct</option>
+        <option>Elevate</option>
+      </select>
+    </div>
+
+    <select id="city">
+      <option value="">City</option>
+      <option>Mumbai</option>
+      <option>Delhi</option>
+      <option>Dubai</option>
+    </select>
+
+    <select id="budget">
+      <option value="">Budget</option>
+      <option>₹1L</option>
+      <option>₹3L</option>
+      <option>₹5L</option>
+    </select>
+
+    <select id="group">
+      <option value="">Group</option>
+      <option>Solo</option>
+      <option>Couple</option>
+      <option>Friends</option>
+    </select>
+
+  </div>
+
+</div>
+
+<div id="output"></div>
+
+<!-- BUTTONS -->
+<div class="buttons">
+  <button class="reset-btn" onclick="resetAll()">Reset</button>
+  <button class="generate-btn" onclick="generate()">Generate</button>
+</div>
+
+<script>
+
+function showFields() {
+  const mode = document.getElementById("mode").value;
+
+  document.getElementById("fields").classList.remove("hidden");
+
+  if (mode === "experience") {
+    document.getElementById("experienceFields").classList.remove("hidden");
+    document.getElementById("conciergeFields").classList.add("hidden");
+  } else {
+    document.getElementById("conciergeFields").classList.remove("hidden");
+    document.getElementById("experienceFields").classList.add("hidden");
+  }
+}
+
+async function generate() {
+
+  document.getElementById("output").innerHTML = "Curating...";
+
+  const res = await fetch("/generate", { method: "POST" });
+  const data = await res.json();
+
+  let html = `<button class="back" onclick="goBack()">← Back</button>`;
+  html += `<div class="card"><h2>${data.title}</h2>`;
+
+  data.itinerary.forEach(d => {
+    html += `<p><b>${d.day}</b></p>`;
+    d.plan.forEach(p => html += `<p>- ${p}</p>`);
+  });
+
+  html += `</div>`;
+
+  document.getElementById("output").innerHTML = html;
+}
+
+function goBack() {
+  document.getElementById("output").innerHTML = "";
+}
+
+function resetAll() {
+  location.reload();
+}
+
+</script>
+
+</body>
+</html>

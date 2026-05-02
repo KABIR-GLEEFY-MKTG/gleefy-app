@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gleefy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda&family=Montserrat&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      background: #0b0b0b;
+      color: white;
+      font-family: Montserrat;
+    }
+
+    /* SPLASH */
+    #splash {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: #0b0b0b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    #splash img {
+      width: 120px;
+      margin-bottom: 20px;
+      animation: fade 2s ease;
+    }
+
+    #splash h1 {
+      font-family: "Bodoni Moda";
+      letter-spacing: 3px;
+      animation: fade 2.5s ease;
+    }
+
+    #splash p {
+      color: #c8a96a;
+      animation: fade 3s ease;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* LOCK SCREEN */
+    #lock {
+      display: none;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #lock img {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-family: "Bodoni Moda";
+    }
+
+    input {
+      padding: 10px;
+      margin: 10px;
+      background: black;
+      border: 1px solid #c8a96a;
+      color: white;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #c8a96a;
+      border: none;
+      color: black;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <img src="logo.png">
+  <h1>GLEEFY</h1>
+  <p>Impossible is Inevitable</p>
+</div>
+
+<!-- LOCK -->
+<div id="lock">
+  <img src="logo.png">
+  <h2>Private Access</h2>
+  <input type="password" id="pass" placeholder="Enter access code">
+  <button onclick="unlock()">Enter</button>
+</div>
+
+<script>
+
+// SHOW SPLASH THEN LOCK
+setTimeout(() => {
+  document.getElementById("splash").style.display = "none";
+  document.getElementById("lock").style.display = "flex";
+}, 2500);
+
+// PASSWORD → REDIRECT (NO IFRAME)
+function unlock() {
+  const password = document.getElementById("pass").value;
+
+  if (password === "gleefy123") {
+    window.location.href = "/app.html";
+  } else {
+    alert("Wrong code");
+  }
+}
+
+</script>
+
+</body>
+</html>
